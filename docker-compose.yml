@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: WellThatIsAPrettyDecentP@ssvv0rd
+      POSTGRES_USER: phrase-learner-db-user
+      POSTGRES_DB: phrase-learner
+    ports:
+      - "5432:5432"
+  backend:
+    build: https://github.com/PeachFruitDev/phrase-learner-back.git
+    ports:
+      - "8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/phrase-learner
+      SPRING_DATASOURCE_USERNAME: phrase-learner-db-user
+      SPRING_DATASOURCE_PASSWORD: WellThatIsAPrettyDecentP@ssvv0rd
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+  frontend:
+    build: https://github.com/PeachFruitDev/phrase-learner-front.git
+    ports:
+      - "80:4200"
+    depends_on:
+      - backend
